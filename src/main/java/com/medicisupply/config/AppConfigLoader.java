@@ -17,11 +17,10 @@ public class AppConfigLoader {
     private static final String YAML_FILE = "config.yaml";
 
     public static AppConfig load(String[] args) {
-        Map<String, String> config = new HashMap<>();
 
         // 1. CLI args
         Map<String, String> cliArgs = parseArgs(args);
-        config.putAll(cliArgs);
+        Map<String, String> config = new HashMap<>(cliArgs);
         if (!cliArgs.isEmpty()) {
             log.info("Loaded CLI arguments: {}", cliArgs);
         }
@@ -38,11 +37,12 @@ public class AppConfigLoader {
         }
 
         // 3. YAML config
+        Map<String, Object> yamlMap = null;
         if (!config.containsKey("inputFilePath") || !config.containsKey("outputFilePath")) {
             try (InputStream input = AppConfigLoader.class.getClassLoader().getResourceAsStream(YAML_FILE)) {
                 if (input != null) {
                     Yaml yaml = new Yaml();
-                    Map<String, Object> yamlMap = yaml.load(input);
+                    yamlMap = yaml.load(input);
                     log.info("Parsed YAML: {}", yamlMap);
                     if (yamlMap != null) {
                         config.putIfAbsent("inputFilePath", (String) yamlMap.get("inputFilePath"));
@@ -73,7 +73,21 @@ public class AppConfigLoader {
         log.info("Final OUTPUT path: {}", outputPath);
         log.info("Working directory: {}", System.getProperty("user.dir"));
 
-        return new AppConfig(inputPath, outputPath);
+
+        int maxRows = -1; // default: no splitting
+        if (cliArgs.containsKey("maxRowsPerFile")) {
+            maxRows = Integer.parseInt(cliArgs.get("maxRowsPerFile"));
+            log.info("Loaded maxRowsPerFile from CLI: {}", maxRows);
+        } else if (env.containsKey("MAX_ROWS_PER_FILE")) {
+            maxRows = Integer.parseInt(env.get("MAX_ROWS_PER_FILE"));
+            log.info("Loaded maxRowsPerFile from ENV: {}", maxRows);
+        } else if (yamlMap != null && yamlMap.containsKey("maxRowsPerFile")) {
+            maxRows = (int) yamlMap.get("maxRowsPerFile");
+            log.info("Loaded maxRowsPerFile from YAML: {}", maxRows);
+        }
+
+        return new AppConfig(inputPath, outputPath, maxRows);
+
     }
 
     private static Map<String, String> parseArgs(String[] args) {

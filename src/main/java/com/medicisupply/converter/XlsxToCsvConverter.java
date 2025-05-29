@@ -1,4 +1,3 @@
-
 package com.medicisupply.converter;
 
 import com.medicisupply.config.AppConfig;
@@ -27,7 +26,13 @@ public class XlsxToCsvConverter {
             List<ProductRow> rows = reader.read(new File(config.getInputPath()));
 
             CsvWriter writer = new CsvWriter();
-            writer.write(new File(config.getOutputPath()), rows, FieldMapper.getFieldMappings());
+            writer.write(
+                    new File(config.getOutputPath()),
+                    rows,
+                    FieldMapper.getFieldMappings(),
+                    config.getMaxRowsPerFile()
+            );
+
             log.info("CSV successfully written to " + config.getOutputPath());
         } catch (Exception e) {
             throw new CsvConversionException("Failed to convert XLSX to CSV", e);

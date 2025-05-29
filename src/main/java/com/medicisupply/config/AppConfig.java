@@ -1,4 +1,3 @@
-
 package com.medicisupply.config;
 
 import lombok.AllArgsConstructor;
@@ -9,4 +8,5 @@ import lombok.Data;
 public class AppConfig {
     private final String inputPath;
     private final String outputPath;
+    private final int maxRowsPerFile;
 }
