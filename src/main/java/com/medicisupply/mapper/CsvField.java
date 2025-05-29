@@ -23,5 +23,4 @@ public enum CsvField {
         this.header = header;
         this.defaultValue = defaultValue;
     }
-
 }

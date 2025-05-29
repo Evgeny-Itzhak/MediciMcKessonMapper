@@ -1,26 +1,30 @@
-
 package com.medicisupply.mapper;
 
 import com.medicisupply.model.ProductRow;
 
-import static com.medicisupply.mapper.CsvField.COMMAND;
+import java.util.Map;
 
 public class FieldProcessor {
-    public static String process(CsvField field, ProductRow row) {
-        switch (field) {
-            case HANDLE:
-                return row.getField("E1 SKU");
-            case COMMAND:
-                return COMMAND.getDefaultValue();
-            case TITLE:
-                return row.getField("Retail Description");
-            case BODYHTML:
-                return row.getField("Retail Features & Benefits");
-            case VENDOR:
-                return row.getField("Brand or Series");
 
+    public static String process(CsvField field, ProductRow row, Map<CsvField, String> mapping) {
+        switch (field) {
+            case COMMAND:
+                return field.getDefaultValue();
+            case HANDLE:
+            case TITLE:
+            case BODYHTML:
+            case VENDOR:
+            case TESTCOLUMN:
+                String sourceColumn = mapping.get(field);
+                if (sourceColumn != null) {
+                    String value = row.getField(sourceColumn);
+                    return (value == null || value.isEmpty()) && field.getDefaultValue() != null
+                            ? field.getDefaultValue()
+                            : value;
+                }
+                return "";
             default:
-                return row.getField(field.getHeader());
+                return "";
         }
     }
 }

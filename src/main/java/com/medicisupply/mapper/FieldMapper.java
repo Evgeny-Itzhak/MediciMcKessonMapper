@@ -1,19 +1,20 @@
-
 package com.medicisupply.mapper;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FieldMapper {
-    public static Map<String, CsvField> getFieldMappings() {
-        Map<String, CsvField> map = new LinkedHashMap<>();
-        map.put("E1 SKU", CsvField.HANDLE);
-        map.put("Command", CsvField.COMMAND);
-        map.put("Body HTML", CsvField.BODYHTML);
-        map.put("Retail Description", CsvField.TITLE);
-        map.put("Brand or Series", CsvField.VENDOR);
-        map.put("TestColumn", CsvField.TESTCOLUMN);
-        // Add more mappings as needed
+
+    public static Map<CsvField, String> getFieldMappings() {
+        Map<CsvField, String> map = new LinkedHashMap<>();
+
+        map.put(CsvField.HANDLE, "Retail Description");
+        map.put(CsvField.COMMAND, "Command");
+        map.put(CsvField.TITLE, "Retail Description");
+        map.put(CsvField.BODYHTML, "Body HTML");
+        map.put(CsvField.VENDOR, "Brand or Series");
+        map.put(CsvField.TESTCOLUMN, "TestColumn");
+
         return map;
     }
 }

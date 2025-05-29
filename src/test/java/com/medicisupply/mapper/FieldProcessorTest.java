@@ -3,31 +3,39 @@ package com.medicisupply.mapper;
 import com.medicisupply.model.ProductRow;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class FieldProcessorTest {
 
     @Test
-    void testHandleMapping() {
-        ProductRow row = new ProductRow();
-        row.setField("E1 SKU", "123-ABC");
+    void testCommandFieldReturnsMerge() {
+        ProductRow row = new ProductRow(); // not used
+        Map<CsvField, String> mapping = FieldMapper.getFieldMappings();
 
-        String result = FieldProcessor.process(CsvField.HANDLE, row);
-        assertEquals("123-ABC", result);
-    }
-
-    @Test
-    void testCommandDefaultValue() {
-        ProductRow row = new ProductRow();
-        String result = FieldProcessor.process(CsvField.COMMAND, row);
+        String result = FieldProcessor.process(CsvField.COMMAND, row, mapping);
         assertEquals("MERGE", result);
     }
 
     @Test
-    void testFallbackToDefaultValue() {
-        ProductRow row = new ProductRow(); // No field set
-        CsvField fieldWithDefault = CsvField.COMMAND;
-        String result = FieldProcessor.process(fieldWithDefault, row);
-        assertEquals("MERGE", result);
+    void testHandleReadsMappedField() {
+        ProductRow row = new ProductRow();
+        row.setField("Retail Description", "Example Product");
+
+        Map<CsvField, String> mapping = FieldMapper.getFieldMappings();
+        String result = FieldProcessor.process(CsvField.HANDLE, row, mapping);
+
+        assertEquals("Example Product", result);
+    }
+
+    @Test
+    void testDefaultValueFallbackWhenNull() {
+        ProductRow row = new ProductRow(); // No fields set
+
+        Map<CsvField, String> mapping = FieldMapper.getFieldMappings();
+        String result = FieldProcessor.process(CsvField.TESTCOLUMN, row, mapping);
+
+        assertEquals("", result); // No default value defined
     }
 }

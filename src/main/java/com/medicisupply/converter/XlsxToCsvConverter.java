@@ -2,6 +2,7 @@ package com.medicisupply.converter;
 
 import com.medicisupply.config.AppConfig;
 import com.medicisupply.exception.CsvConversionException;
+import com.medicisupply.mapper.CsvField;
 import com.medicisupply.mapper.FieldMapper;
 import com.medicisupply.model.ProductRow;
 import com.medicisupply.reader.ExcelReader;
@@ -10,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 public class XlsxToCsvConverter {
@@ -21,19 +23,21 @@ public class XlsxToCsvConverter {
 
     public void convert() {
         try {
-            log.info("Reading Excel file: " + config.getInputPath());
+            log.info("Reading Excel file: {}", config.getInputPath());
             ExcelReader reader = new ExcelReader();
             List<ProductRow> rows = reader.read(new File(config.getInputPath()));
+
+            Map<CsvField, String> mapping = FieldMapper.getFieldMappings();
 
             CsvWriter writer = new CsvWriter();
             writer.write(
                     new File(config.getOutputPath()),
                     rows,
-                    FieldMapper.getFieldMappings(),
+                    mapping,
                     config.getMaxRowsPerFile()
             );
 
-            log.info("CSV successfully written to " + config.getOutputPath());
+            log.info("CSV successfully written to {}", config.getOutputPath());
         } catch (Exception e) {
             throw new CsvConversionException("Failed to convert XLSX to CSV", e);
         }
