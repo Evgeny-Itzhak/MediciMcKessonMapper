@@ -10,12 +10,15 @@ public class FieldProcessor {
         switch (field) {
             case HANDLE:
                 return row.getField("E1 SKU");
-            case TITLE:
-                return row.getField("Retail Description");
-            case VENDOR:
-                return row.getField("Brand or Series");
             case COMMAND:
                 return COMMAND.getDefaultValue();
+            case TITLE:
+                return row.getField("Retail Description");
+            case BODYHTML:
+                return row.getField("Retail Features & Benefits");
+            case VENDOR:
+                return row.getField("Brand or Series");
+
             default:
                 return row.getField(field.getHeader());
         }

@@ -9,6 +9,7 @@ public class FieldMapper {
         Map<String, CsvField> map = new LinkedHashMap<>();
         map.put("E1 SKU", CsvField.HANDLE);
         map.put("Command", CsvField.COMMAND);
+        map.put("Body HTML", CsvField.BODYHTML);
         map.put("Retail Description", CsvField.TITLE);
         map.put("Brand or Series", CsvField.VENDOR);
         map.put("TestColumn", CsvField.TESTCOLUMN);
