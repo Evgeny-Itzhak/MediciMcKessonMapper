@@ -15,6 +15,7 @@ public class FieldMapper {
         map.put(CsvField.VENDOR, ExcelField.BRAND_OR_SERIES.getHeader());
         map.put(CsvField.TYPE, ExcelField.APPLICATION.getHeader());
         map.put(CsvField.TAGS_COMMAND, ExcelField.APPLICATION.getHeader());
+        map.put(CsvField.TAGS, ExcelField.SUPPLY_MANAGER_CATEGORY.getHeader());
         return map;
     }
 }

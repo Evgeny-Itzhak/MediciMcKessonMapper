@@ -1,7 +1,8 @@
-package com.medicisupply.mapper;
+package com.medicisupply.writer;
 
+import com.medicisupply.mapper.CsvField;
+import com.medicisupply.mapper.FieldMapper;
 import com.medicisupply.model.ProductRow;
-import com.medicisupply.writer.CsvWriter;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

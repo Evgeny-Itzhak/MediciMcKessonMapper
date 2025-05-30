@@ -16,6 +16,7 @@ public enum ExcelField {
     BRAND_OR_SERIES("Brand or Series"),
     APPLICATION("Application"),
     TAGS_COMMAND ("Tags Command"),
+    SUPPLY_MANAGER_CATEGORY("Supply Manager Category"),
 
     //columns that are NOT in csv-file
     MCK_ITEM_NO("McK Item No"),

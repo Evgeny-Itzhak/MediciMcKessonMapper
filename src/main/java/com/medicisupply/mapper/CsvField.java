@@ -11,7 +11,8 @@ public enum CsvField {
     BODY_HTML("Body HTML"),
     VENDOR("Vendor"),
     TYPE ("Type"),
-    TAGS_COMMAND ("Tags Command", "REPLACE");
+    TAGS_COMMAND ("Tags Command", "REPLACE"),
+    TAGS("Tags");
 
     private final String header;
     private final String defaultValue;
