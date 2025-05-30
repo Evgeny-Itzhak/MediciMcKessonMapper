@@ -1,3 +1,4 @@
-inputFilePath: McKesson-eCommerceFormularyWeekly/input.xlsx
+#inputFilePath: McKesson-eCommerceFormularyWeekly/input.xlsx
+inputFilePath: McKesson-eCommerceFormularyWeekly/input-full.xlsx
 outputFilePath: csv-McKessonMappingResults/output.csv
 maxRowsPerFile: 0
