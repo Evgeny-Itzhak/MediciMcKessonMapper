@@ -15,6 +15,11 @@ public class FieldProcessor {
      * Converts a CsvField for the given ProductRow into the correct CSV value.
      */
     public static String process(CsvField field, ProductRow row, Map<CsvField, String> mapping) {
+        // Return empty for null field to avoid NullPointerException
+        if (field == null) {
+            return "";
+        }
+
         switch (field) {
             case HANDLE:
                 return buildHandle(row);
@@ -23,7 +28,7 @@ public class FieldProcessor {
                 return field.getDefaultValue();
 
             case TITLE:
-            case BODYHTML:
+            case BODY_HTML:
             case VENDOR:
             case TESTCOLUMN:
                 return processStandardField(field, row, mapping);
@@ -58,7 +63,7 @@ public class FieldProcessor {
     }
 
     /**
-     * Processes standard fields (TITLE, BODYHTML, etc.) based on mapping.
+     * Processes standard fields (TITLE, BODY_HTML, etc.) based on mapping.
      */
     private static String processStandardField(CsvField field, ProductRow row, Map<CsvField, String> mapping) {
         String sourceColumn = mapping.get(field);

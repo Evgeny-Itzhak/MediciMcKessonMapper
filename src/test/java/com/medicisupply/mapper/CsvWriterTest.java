@@ -18,9 +18,11 @@ class CsvWriterTest {
         // --- Prepare mock data ---
         ProductRow row = new ProductRow();
         row.setField("Retail Description", "Test Product");
-        row.setField("Brand or Series",   "Test Brand");
-        row.setField("Body HTML",         "<p>Description</p>");
-        row.setField("TestColumn",        "TestValue");
+        row.setField("McK Item No", "12345");
+        row.setField("Manufacturer Number", "MN6789");
+        row.setField("Brand or Series", "Test Brand");
+        row.setField("Retail Features & Benefits", "<p>Description</p>");
+        row.setField("TestColumn", "TestValue");
 
         List<ProductRow> data = Collections.singletonList(row);
         Map<CsvField, String> fieldMap = FieldMapper.getFieldMappings();
@@ -36,35 +38,26 @@ class CsvWriterTest {
         String output = Files.readString(tempCsv.toPath(), StandardCharsets.UTF_8);
 
         // --- Assertions ---
-        assertTrue(
-                output.contains("Handle"),
-                "ERROR: 'Handle' was not found in the output"
-        );
 
-        assertTrue(
-                output.contains("MERGE"),
-                "ERROR: 'MERGE' was not found in the output (default for COMMAND)"
-        );
+        // Header and default COMMAND check
+        assertTrue(output.contains("Handle"),
+                "ERROR: 'Handle' was not found in the output");
+        assertTrue(output.contains("MERGE"),
+                "ERROR: 'MERGE' was not found in the output (default for COMMAND)");
 
-        assertTrue(
-                output.contains("Test Product"),
-                "ERROR: 'Test Product' was not found in the output (mapped from 'Retail Description')"
-        );
+        // New HANDLE format: "Retail Description MSC-MCK-<McK Item No> <Manufacturer Number>"
+        assertTrue(output.contains("Test Product MSC-MCK-12345 MN6789"),
+                "ERROR: built Handle value was not found in the output");
 
-        assertTrue(
-                output.contains("Test Brand"),
-                "ERROR: 'Test Brand' was not found in the output"
-        );
-
-        assertTrue(
-                output.contains("<p>Description</p>"),
-                "ERROR: '<p>Description</p>' was not found in the output"
-        );
-
-        assertTrue(
-                output.contains("TestValue"),
-                "ERROR: 'TestValue' was not found in the output"
-        );
+        // Other fields
+        assertTrue(output.contains("Test Product"),
+                "ERROR: 'Test Product' was not found in the output (mapped from 'Retail Description')");
+        assertTrue(output.contains("Test Brand"),
+                "ERROR: 'Test Brand' was not found in the output");
+        assertTrue(output.contains("<p>Description</p>"),
+                "ERROR: '<p>Description</p>' was not found in the output");
+        assertTrue(output.contains("TestValue"),
+                "ERROR: 'TestValue' was not found in the output");
     }
 
     @Test

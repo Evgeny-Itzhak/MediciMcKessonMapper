@@ -8,7 +8,7 @@ public enum CsvField {
     HANDLE("Handle"),
     COMMAND("Command", "MERGE"),
     TITLE("Title"),
-    BODYHTML("Body HTML"),
+    BODY_HTML("Body HTML"),
     VENDOR("Vendor"),
     TESTCOLUMN ("TestColumn");
 
