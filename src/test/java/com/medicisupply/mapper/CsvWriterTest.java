@@ -22,7 +22,7 @@ class CsvWriterTest {
         row.setField("Manufacturer Number", "MN6789");
         row.setField("Brand or Series", "Test Brand");
         row.setField("Retail Features & Benefits", "<p>Description</p>");
-        row.setField("TestColumn", "TestValue");
+        row.setField("Application", "TestText");
 
         List<ProductRow> data = Collections.singletonList(row);
         Map<CsvField, String> fieldMap = FieldMapper.getFieldMappings();
@@ -56,8 +56,8 @@ class CsvWriterTest {
                 "ERROR: 'Test Brand' was not found in the output");
         assertTrue(output.contains("<p>Description</p>"),
                 "ERROR: '<p>Description</p>' was not found in the output");
-        assertTrue(output.contains("TestValue"),
-                "ERROR: 'TestValue' was not found in the output");
+        assertTrue(output.contains("REPLACE"),
+                "ERROR: 'REPLACE' was not found in the output (default for Tags Command)");
     }
 
     @Test

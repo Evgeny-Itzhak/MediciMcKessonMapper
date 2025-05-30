@@ -25,12 +25,13 @@ public class FieldProcessor {
                 return buildHandle(row);
 
             case COMMAND:
+            case TAGS_COMMAND:
                 return field.getDefaultValue();
 
             case TITLE:
             case BODY_HTML:
             case VENDOR:
-            case TESTCOLUMN:
+            case TYPE:
                 return processStandardField(field, row, mapping);
 
             default:

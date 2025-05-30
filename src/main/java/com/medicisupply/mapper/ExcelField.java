@@ -8,11 +8,16 @@ import lombok.Getter;
  */
 @Getter
 public enum ExcelField {
+
+    //columns that are IN the csv-file
     RETAIL_DESCRIPTION("Retail Description"),
     COMMAND("Command"),
     RETAIL_FEATURES_AND_BENEFITS("Retail Features & Benefits"),
     BRAND_OR_SERIES("Brand or Series"),
-    TESTCOLUMN("TestColumn"),
+    APPLICATION("Application"),
+    TAGS_COMMAND ("Tags Command"),
+
+    //columns that are NOT in csv-file
     MCK_ITEM_NO("McK Item No"),
     MANUFACTURER_NUMBER("Manufacturer Number");
 

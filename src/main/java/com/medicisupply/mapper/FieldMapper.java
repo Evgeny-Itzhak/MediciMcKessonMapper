@@ -13,8 +13,8 @@ public class FieldMapper {
         map.put(CsvField.TITLE, ExcelField.RETAIL_DESCRIPTION.getHeader());
         map.put(CsvField.BODY_HTML, ExcelField.RETAIL_FEATURES_AND_BENEFITS.getHeader());
         map.put(CsvField.VENDOR, ExcelField.BRAND_OR_SERIES.getHeader());
-        map.put(CsvField.TESTCOLUMN, ExcelField.TESTCOLUMN.getHeader());
-
+        map.put(CsvField.TYPE, ExcelField.APPLICATION.getHeader());
+        map.put(CsvField.TAGS_COMMAND, ExcelField.APPLICATION.getHeader());
         return map;
     }
 }

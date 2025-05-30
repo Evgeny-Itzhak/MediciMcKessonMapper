@@ -10,7 +10,8 @@ public enum CsvField {
     TITLE("Title"),
     BODY_HTML("Body HTML"),
     VENDOR("Vendor"),
-    TESTCOLUMN ("TestColumn");
+    TYPE ("Type"),
+    TAGS_COMMAND ("Tags Command", "REPLACE");
 
     private final String header;
     private final String defaultValue;
