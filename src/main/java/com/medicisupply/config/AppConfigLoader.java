@@ -17,7 +17,6 @@ public class AppConfigLoader {
     private static final String YAML_FILE = "config.yaml";
 
     public static AppConfig load(String[] args) {
-
         // 1. CLI args
         Map<String, String> cliArgs = parseArgs(args);
         Map<String, String> config = new HashMap<>(cliArgs);
@@ -62,8 +61,15 @@ public class AppConfigLoader {
 
         File outputDir = new File(OUTPUT_DIR);
         if (!outputDir.exists()) {
-            outputDir.mkdirs();
+            if (outputDir.mkdirs()) {
+                log.info("Created output directory: {}", outputDir.getAbsolutePath());
+            } else {
+                log.error("Failed to create output directory: {}", outputDir.getAbsolutePath());
+            }
+        } else {
+            log.debug("Output directory already exists: {}", outputDir.getAbsolutePath());
         }
+
         String outputPath = config.getOrDefault("outputFilePath",
                 new File(outputDir, DEFAULT_OUTPUT_FILE).getAbsolutePath());
 
@@ -72,7 +78,6 @@ public class AppConfigLoader {
         log.info("Final INPUT path: {}", inputPath);
         log.info("Final OUTPUT path: {}", outputPath);
         log.info("Working directory: {}", System.getProperty("user.dir"));
-
 
         int maxRows = -1; // default: no splitting
         if (cliArgs.containsKey("maxRowsPerFile")) {
@@ -87,7 +92,6 @@ public class AppConfigLoader {
         }
 
         return new AppConfig(inputPath, outputPath, maxRows);
-
     }
 
     private static Map<String, String> parseArgs(String[] args) {
@@ -106,7 +110,13 @@ public class AppConfigLoader {
     private static void createLogsDirectory() {
         File logDir = new File("logs");
         if (!logDir.exists()) {
-            logDir.mkdirs();
+            if (logDir.mkdirs()) {
+                log.info("Created logs directory: {}", logDir.getAbsolutePath());
+            } else {
+                log.error("Failed to create logs directory: {}", logDir.getAbsolutePath());
+            }
+        } else {
+            log.debug("Logs directory already exists: {}", logDir.getAbsolutePath());
         }
     }
 }
