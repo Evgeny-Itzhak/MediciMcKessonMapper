@@ -8,9 +8,9 @@ public class FieldProcessor {
 
     public static String process(CsvField field, ProductRow row, Map<CsvField, String> mapping) {
         switch (field) {
+            case HANDLE:
             case COMMAND:
                 return field.getDefaultValue();
-            case HANDLE:
             case TITLE:
             case BODYHTML:
             case VENDOR:

@@ -11,7 +11,7 @@ public class FieldMapper {
         map.put(CsvField.HANDLE, "Retail Description");
         map.put(CsvField.COMMAND, "Command");
         map.put(CsvField.TITLE, "Retail Description");
-        map.put(CsvField.BODYHTML, "Body HTML");
+        map.put(CsvField.BODYHTML, "Retail Features & Benefits");
         map.put(CsvField.VENDOR, "Brand or Series");
         map.put(CsvField.TESTCOLUMN, "TestColumn");
 
