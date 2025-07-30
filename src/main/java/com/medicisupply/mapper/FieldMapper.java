@@ -30,6 +30,8 @@ public class FieldMapper {
         map.put(CsvField.DIMENSION_UOM, ExcelField.DIMENSION_UOM.getHeader());
         map.put(CsvField.VARIANT_BARCODE, ExcelField.UPC.getHeader());
         map.put(CsvField.VARIANT_IMAGE, ExcelField.PRIMARY_IMAGE.getHeader());
+        map.put(CsvField.VARIANT_INVENTORY_TRACKER, "");
+        map.put(CsvField.VARIANT_COST, "");
         return map;
     }
 }
