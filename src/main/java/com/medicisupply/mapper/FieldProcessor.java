@@ -47,6 +47,8 @@ public class FieldProcessor {
             case DIMENSION_UOM:
             case VARIANT_BARCODE:
             case VARIANT_IMAGE:
+            case OPTION1_NAME:
+            case OPTION1_VALUE:
                 return processStandardField(field, row, mapping);
 
             case TAGS:

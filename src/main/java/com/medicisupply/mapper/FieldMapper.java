@@ -32,6 +32,8 @@ public class FieldMapper {
         map.put(CsvField.VARIANT_IMAGE, ExcelField.PRIMARY_IMAGE.getHeader());
         map.put(CsvField.VARIANT_INVENTORY_TRACKER, "");
         map.put(CsvField.VARIANT_COST, "");
+        map.put(CsvField.OPTION1_NAME, ExcelField.SIZE.getHeader());
+        map.put(CsvField.OPTION1_VALUE, ExcelField.E1_SKU.getHeader());
         return map;
     }
 }

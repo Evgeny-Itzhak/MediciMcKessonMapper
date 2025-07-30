@@ -24,6 +24,8 @@ class FieldMapperTest {
         assertEquals("Dimension UOM", map.get(CsvField.DIMENSION_UOM));
         assertEquals("UPC", map.get(CsvField.VARIANT_BARCODE));
         assertEquals("Primary Image", map.get(CsvField.VARIANT_IMAGE));
+        assertEquals("Size", map.get(CsvField.OPTION1_NAME));
+        assertEquals("E1 SKU", map.get(CsvField.OPTION1_VALUE));
     }
 
     @Test

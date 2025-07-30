@@ -30,7 +30,8 @@ public enum ExcelField {
     //columns that are NOT in csv-file
     MCK_ITEM_NO("McK Item No"),
     MANUFACTURER_NUMBER("Manufacturer Number"),
-    IMAGES("Images");
+    IMAGES("Images"),
+    SIZE("Size");
 
     private final String header;
 

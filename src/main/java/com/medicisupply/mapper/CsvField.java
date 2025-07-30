@@ -28,7 +28,9 @@ public enum CsvField {
     VARIANT_BARCODE("Variant Barcode"),
     VARIANT_IMAGE("Variant Image"),
     VARIANT_INVENTORY_TRACKER("Variant Inventory Tracker"),
-    VARIANT_COST("Variant Cost");
+    VARIANT_COST("Variant Cost"),
+    OPTION1_NAME("Option1 Name"),
+    OPTION1_VALUE("Option1 Value");
 
     private final String header;
     private final String defaultValue;
