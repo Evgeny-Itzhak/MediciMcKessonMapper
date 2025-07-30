@@ -12,7 +12,8 @@ public enum CsvField {
     VENDOR("Vendor"),
     TYPE ("Type"),
     TAGS_COMMAND ("Tags Command", "REPLACE"),
-    TAGS("Tags");
+    TAGS("Tags"),
+    STATUS("Status", "Active");
 
     private final String header;
     private final String defaultValue;
