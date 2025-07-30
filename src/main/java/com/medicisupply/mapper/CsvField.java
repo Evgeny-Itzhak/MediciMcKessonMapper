@@ -20,6 +20,8 @@ public enum CsvField {
     VARIANT_SKU("Variant SKU"),
     VARIANT_WEIGHT("Variant Weight"),
     VARIANT_WEIGHT_UNIT("Variant Weight Unit"),
+    VARIANT_PRICE("Variant Price"),
+    COST_PER_ITEM("Cost per item"),
     SHIPPING_WIDTH("Shipping Width"),
     SHIPPING_HEIGHT("Shipping Height"),
     SHIPPING_DEPTH("Shipping Depth"),
