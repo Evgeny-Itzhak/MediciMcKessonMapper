@@ -11,7 +11,7 @@ import java.util.Map;
 @Log4j2
 public class AppConfigLoader {
     private static final String INPUT_DIR = "McKesson-eCommerceFormularyWeekly";
-    private static final String OUTPUT_DIR = "csv-McKessonMappingResults";
+    public static final String OUTPUT_DIR = "csv-McKessonMappingResults";
     private static final String DEFAULT_INPUT_FILE = "input.xlsx";
     private static final String DEFAULT_OUTPUT_FILE = "output.csv";
     private static final String YAML_FILE = "config.yaml";
