@@ -30,7 +30,13 @@ public enum CsvField {
     VARIANT_INVENTORY_TRACKER("Variant Inventory Tracker"),
     VARIANT_COST("Variant Cost"),
     OPTION1_NAME("Option1 Name"),
-    OPTION1_VALUE("Option1 Value");
+    OPTION1_VALUE("Option1 Value"),
+    OPTION2_NAME("Option2 Name"),
+    OPTION2_VALUE("Option2 Value"),
+    OPTION3_NAME("Option3 Name"),
+    OPTION3_VALUE("Option3 Value"),
+    OPTION4_NAME("Option4 Name"),
+    OPTION4_VALUE("Option4 Value");
 
     private final String header;
     private final String defaultValue;

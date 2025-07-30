@@ -34,6 +34,12 @@ public class FieldMapper {
         map.put(CsvField.VARIANT_COST, "");
         map.put(CsvField.OPTION1_NAME, ExcelField.SIZE.getHeader());
         map.put(CsvField.OPTION1_VALUE, ExcelField.E1_SKU.getHeader());
+        map.put(CsvField.OPTION2_NAME, "");
+        map.put(CsvField.OPTION2_VALUE, "");
+        map.put(CsvField.OPTION3_NAME, "");
+        map.put(CsvField.OPTION3_VALUE, "");
+        map.put(CsvField.OPTION4_NAME, "");
+        map.put(CsvField.OPTION4_VALUE, "");
         return map;
     }
 }
