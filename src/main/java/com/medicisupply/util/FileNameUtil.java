@@ -1,6 +1,7 @@
 package com.medicisupply.util;
 
 import com.medicisupply.config.AppConfig;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.regex.Matcher;
@@ -55,21 +56,39 @@ public class FileNameUtil {
      * @return YearMonth object containing the extracted year and month, or null if no date is found
      */
     public static YearMonth extractYearMonthFromFileName(String inputFileName) {
+        LocalDate date = extractDateFromFileName(inputFileName);
+        if (date == null) {
+            return null;
+        }
+        return YearMonth.of(date.getYear(), date.getMonth());
+    }
+    
+    /**
+     * Extracts full date (year, month, day) from the input file name.
+     * Supports formats like "Month Day, Year" (e.g., "May 26, 2025") and "DDMMYYYY" (e.g., "14092022").
+     * If no date is found, returns null.
+     * 
+     * @param inputFileName the name of the input file
+     * @return LocalDate object containing the extracted year, month, and day, or null if no date is found
+     */
+    public static LocalDate extractDateFromFileName(String inputFileName) {
         // Try to match "Month Day, Year" format
         Matcher matcher = DATE_PATTERN.matcher(inputFileName);
         if (matcher.find()) {
             String monthStr = matcher.group(1);
+            int day = Integer.parseInt(matcher.group(2));
             int year = Integer.parseInt(matcher.group(3));
             Month month = Month.valueOf(monthStr.toUpperCase().substring(0, 3) + monthStr.substring(3).toLowerCase());
-            return YearMonth.of(year, month);
+            return LocalDate.of(year, month, day);
         }
         
         // Try to match "DDMMYYYY" format
         matcher = NUMERIC_DATE_PATTERN.matcher(inputFileName);
         if (matcher.find()) {
+            int day = Integer.parseInt(matcher.group(1));
             int month = Integer.parseInt(matcher.group(2));
             int year = Integer.parseInt(matcher.group(3));
-            return YearMonth.of(year, month);
+            return LocalDate.of(year, month, day);
         }
         
         // If no date found, return null
@@ -84,7 +103,9 @@ public class FileNameUtil {
      * @param inputFileName the name of the input file
      * @param baseDir the base directory where the year-month directory will be created
      * @return the full path to the year-month directory or the base directory if no date is found
+     * @deprecated Use {@link #generateYearMonthDayDirectory(String, String)} instead
      */
+    @Deprecated
     public static String generateYearMonthDirectory(String inputFileName, String baseDir) {
         YearMonth yearMonth = extractYearMonthFromFileName(inputFileName);
         
@@ -118,11 +139,56 @@ public class FileNameUtil {
     }
     
     /**
+     * Generates a directory path based on the year, month, and day extracted from the input file name.
+     * The directory follows the pattern {YYYY_MM/DD}.
+     * If no date is found in the input file name, returns the base directory path.
+     * 
+     * @param inputFileName the name of the input file
+     * @param baseDir the base directory where the year-month-day directory will be created
+     * @return the full path to the year-month-day directory or the base directory if no date is found
+     */
+    public static String generateYearMonthDayDirectory(String inputFileName, String baseDir) {
+        LocalDate date = extractDateFromFileName(inputFileName);
+        
+        // If no date found in the file name, use the base directory
+        if (date == null) {
+            Path dirPath = Paths.get(baseDir);
+            
+            // Create the directory if it doesn't exist
+            try {
+                Files.createDirectories(dirPath);
+                log.debug("Created base directory: {}", dirPath);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create directory: " + dirPath, e);
+            }
+            
+            return dirPath.toString();
+        }
+        
+        // If date found, create a year-month subdirectory with day subdirectory
+        String yearMonthDirName = String.format("%d_%02d", date.getYear(), date.getMonthValue());
+        String dayDirName = String.format("%02d", date.getDayOfMonth());
+        
+        Path yearMonthDirPath = Paths.get(baseDir, yearMonthDirName);
+        Path dayDirPath = Paths.get(yearMonthDirPath.toString(), dayDirName);
+        
+        // Create the directories if they don't exist
+        try {
+            Files.createDirectories(dayDirPath);
+            log.debug("Created directory: {}", dayDirPath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create directory: " + dayDirPath, e);
+        }
+        
+        return dayDirPath.toString();
+    }
+    
+    /**
      * Generates a complete output path for the CSV file based on the input path and base output directory.
      * This method:
      * 1. Extracts the input file name from the input path
      * 2. Generates the output file name based on the input file name
-     * 3. Generates the year-month directory based on the input file name
+     * 3. Generates the year-month-day directory based on the input file name
      * 4. Combines the directory and file name to create the complete output path
      *
      * @param inputPath the full path to the input file
@@ -138,11 +204,11 @@ public class FileNameUtil {
         // Generate output file name based on input file name
         String outputFileName = generateOutputFileName(inputFileName);
         
-        // Create year-month directory based on input file name under the base output directory
-        String yearMonthDir = generateYearMonthDirectory(inputFileName, baseOutputDir);
+        // Create year-month-day directory based on input file name under the base output directory
+        String yearMonthDayDir = generateYearMonthDayDirectory(inputFileName, baseOutputDir);
         
         // Combine the directory and file name to create the complete output path
-        return Paths.get(yearMonthDir, outputFileName).toString();
+        return Paths.get(yearMonthDayDir, outputFileName).toString();
     }
     
     /**
@@ -150,8 +216,8 @@ public class FileNameUtil {
      * This method handles four scenarios:
      * 1. No date in filename + no outputFilePath specified → generate under defaultOutputDir
      * 2. No date in filename + outputFilePath specified → generate under the specified outputFilePath
-     * 3. Date in filename + outputFilePath specified → generate under outputFilePath/YYYY_MM/
-     * 4. Date in filename + no outputFilePath specified → generate under defaultOutputDir/YYYY_MM/
+     * 3. Date in filename + outputFilePath specified → generate under outputFilePath/YYYY_MM/DD/
+     * 4. Date in filename + no outputFilePath specified → generate under defaultOutputDir/YYYY_MM/DD/
      *
      * @param inputPath the full path to the input file
      * @param config the AppConfig object containing configuration information
@@ -166,8 +232,8 @@ public class FileNameUtil {
         String outputFileName = generateOutputFileName(inputFileName);
         
         // Check if the input file name contains a date
-        YearMonth yearMonth = extractYearMonthFromFileName(inputFileName);
-        boolean hasDate = (yearMonth != null);
+        LocalDate date = extractDateFromFileName(inputFileName);
+        boolean hasDate = (date != null);
         
         // Check if outputFilePath was specified
         boolean outputPathSpecified = config.isOutputPathSpecified();
@@ -193,8 +259,9 @@ public class FileNameUtil {
         String outputPath;
         if (hasDate) {
             // Scenarios 3 and 4: Date in filename
-            String yearMonthDir = String.format("%d_%02d", yearMonth.getYear(), yearMonth.getMonthValue());
-            Path dirPath = Paths.get(baseDir, yearMonthDir);
+            String yearMonthDir = String.format("%d_%02d", date.getYear(), date.getMonthValue());
+            String dayDir = String.format("%02d", date.getDayOfMonth());
+            Path dirPath = Paths.get(baseDir, yearMonthDir, dayDir);
             
             // Create the directory if it doesn't exist
             try {
