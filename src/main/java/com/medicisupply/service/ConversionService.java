@@ -4,6 +4,7 @@ import com.medicisupply.config.AppConfig;
 import com.medicisupply.config.AppConfigLoader;
 import com.medicisupply.context.AppContext;
 import com.medicisupply.converter.XlsxToCsvConverter;
+import com.medicisupply.util.FileNameUtil;
 import lombok.extern.log4j.Log4j2;
 
 import java.nio.file.Paths;
@@ -36,15 +37,30 @@ public class ConversionService {
         String inputFileName = Paths.get(config.getInputPath()).getFileName().toString();
         AppContext.setSourceFileName(inputFileName);
 
-        // Log the output path before conversion
-        log.info("Output path before conversion: {}", config.getOutputPath());
+        // Log the output path before generating the final path
+        log.info("Initial output path: {}", config.getOutputPath());
         
-        // Run the converter
-        log.info("Starting conversion from {} to {}", config.getInputPath(), config.getOutputPath());
-        new XlsxToCsvConverter(config).convert();
+        // Generate the final output path based on the four scenarios
+        String outputPath = FileNameUtil.generateOutputPath(
+            config.getInputPath(),
+            config,
+            AppConfigLoader.OUTPUT_DIR
+        );
         
-        // Log the output path after conversion
-        log.info("Output path after conversion: {}", config.getOutputPath());
+        // Create a new AppConfig object with the updated output path
+        AppConfig updatedConfig = new AppConfig(
+            config.getInputPath(),
+            outputPath,
+            config.getMaxRowsPerFile(),
+            config.isOutputPathSpecified()
+        );
+        
+        // Log the final output path
+        log.info("Final output path: {}", updatedConfig.getOutputPath());
+        
+        // Run the converter with the updated config
+        log.info("Starting conversion from {} to {}", updatedConfig.getInputPath(), updatedConfig.getOutputPath());
+        new XlsxToCsvConverter(updatedConfig).convert();
         
         log.info("Conversion completed successfully");
     }

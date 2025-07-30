@@ -1,5 +1,6 @@
 package com.medicisupply.util;
 
+import com.medicisupply.config.AppConfig;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.regex.Matcher;
@@ -7,11 +8,14 @@ import java.util.regex.Pattern;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.File;
 import java.io.IOException;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Utility class for file name operations.
  */
+@Log4j2
 public class FileNameUtil {
     
     // Pattern to match dates in format "Month Day, Year" (e.g., "May 26, 2025")
@@ -124,7 +128,9 @@ public class FileNameUtil {
      * @param inputPath the full path to the input file
      * @param baseOutputDir the base directory for CSV output files
      * @return the complete output path for the CSV file
+     * @deprecated Use {@link #generateOutputPath(String, AppConfig, String)} instead
      */
+    @Deprecated
     public static String generateOutputPath(String inputPath, String baseOutputDir) {
         // Extract the input file name from the path
         String inputFileName = Paths.get(inputPath).getFileName().toString();
@@ -137,5 +143,85 @@ public class FileNameUtil {
         
         // Combine the directory and file name to create the complete output path
         return Paths.get(yearMonthDir, outputFileName).toString();
+    }
+    
+    /**
+     * Generates a complete output path for the CSV file based on the input path, AppConfig, and default output directory.
+     * This method handles four scenarios:
+     * 1. No date in filename + no outputFilePath specified → generate under defaultOutputDir
+     * 2. No date in filename + outputFilePath specified → generate under the specified outputFilePath
+     * 3. Date in filename + outputFilePath specified → generate under outputFilePath/YYYY_MM/
+     * 4. Date in filename + no outputFilePath specified → generate under defaultOutputDir/YYYY_MM/
+     *
+     * @param inputPath the full path to the input file
+     * @param config the AppConfig object containing configuration information
+     * @param defaultOutputDir the default output directory to use if no outputFilePath is specified
+     * @return the complete output path for the CSV file
+     */
+    public static String generateOutputPath(String inputPath, AppConfig config, String defaultOutputDir) {
+        // Extract the input file name from the path
+        String inputFileName = Paths.get(inputPath).getFileName().toString();
+        
+        // Generate output file name based on input file name
+        String outputFileName = generateOutputFileName(inputFileName);
+        
+        // Check if the input file name contains a date
+        YearMonth yearMonth = extractYearMonthFromFileName(inputFileName);
+        boolean hasDate = (yearMonth != null);
+        
+        // Check if outputFilePath was specified
+        boolean outputPathSpecified = config.isOutputPathSpecified();
+        
+        // Get the base directory to use
+        String baseDir;
+        if (outputPathSpecified) {
+            // If outputFilePath was specified, use the parent directory of the specified outputFilePath
+            File outputFile = new File(config.getOutputPath());
+            baseDir = outputFile.getParent();
+            if (baseDir == null) {
+                // If the outputFilePath doesn't have a parent directory, use the current directory
+                baseDir = ".";
+            }
+            log.debug("Using specified output directory: {}", baseDir);
+        } else {
+            // If outputFilePath was not specified, use the default output directory
+            baseDir = defaultOutputDir;
+            log.debug("Using default output directory: {}", baseDir);
+        }
+        
+        // Generate the output path based on the scenario
+        String outputPath;
+        if (hasDate) {
+            // Scenarios 3 and 4: Date in filename
+            String yearMonthDir = String.format("%d_%02d", yearMonth.getYear(), yearMonth.getMonthValue());
+            Path dirPath = Paths.get(baseDir, yearMonthDir);
+            
+            // Create the directory if it doesn't exist
+            try {
+                Files.createDirectories(dirPath);
+                log.debug("Created directory: {}", dirPath);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create directory: " + dirPath, e);
+            }
+            
+            outputPath = Paths.get(dirPath.toString(), outputFileName).toString();
+            log.info("Generated output path for file with date: {}", outputPath);
+        } else {
+            // Scenarios 1 and 2: No date in filename
+            Path dirPath = Paths.get(baseDir);
+            
+            // Create the directory if it doesn't exist
+            try {
+                Files.createDirectories(dirPath);
+                log.debug("Created directory: {}", dirPath);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create directory: " + dirPath, e);
+            }
+            
+            outputPath = Paths.get(dirPath.toString(), outputFileName).toString();
+            log.info("Generated output path for file without date: {}", outputPath);
+        }
+        
+        return outputPath;
     }
 }

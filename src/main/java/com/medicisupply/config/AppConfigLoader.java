@@ -23,6 +23,9 @@ public class AppConfigLoader {
         if (!cliArgs.isEmpty()) {
             log.info("Loaded CLI arguments: {}", cliArgs);
         }
+        
+        // Track if outputFilePath was explicitly specified
+        boolean outputPathSpecified = cliArgs.containsKey("outputFilePath");
 
         // 2. ENV variables
         Map<String, String> env = System.getenv();
@@ -33,6 +36,10 @@ public class AppConfigLoader {
         if (env.containsKey("OUTPUT_FILE_PATH")) {
             config.putIfAbsent("outputFilePath", env.get("OUTPUT_FILE_PATH"));
             log.info("Loaded output path from ENV: {}", env.get("OUTPUT_FILE_PATH"));
+            if (!outputPathSpecified) {
+                outputPathSpecified = true;
+                log.debug("Output path specified via ENV variable");
+            }
         }
 
         // 3. YAML config
@@ -45,7 +52,13 @@ public class AppConfigLoader {
                     log.info("Parsed YAML: {}", yamlMap);
                     if (yamlMap != null) {
                         config.putIfAbsent("inputFilePath", (String) yamlMap.get("inputFilePath"));
-                        config.putIfAbsent("outputFilePath", (String) yamlMap.get("outputFilePath"));
+                        if (!config.containsKey("outputFilePath") && yamlMap.containsKey("outputFilePath")) {
+                            config.put("outputFilePath", (String) yamlMap.get("outputFilePath"));
+                            if (!outputPathSpecified) {
+                                outputPathSpecified = true;
+                                log.debug("Output path specified via YAML config");
+                            }
+                        }
                     }
                 } else {
                     log.warn("config.yaml not found on classpath.");
@@ -77,6 +90,7 @@ public class AppConfigLoader {
         createLogsDirectory();
         log.info("Final INPUT path: {}", inputPath);
         log.info("Final OUTPUT path: {}", outputPath);
+        log.info("Output path explicitly specified: {}", outputPathSpecified);
         log.info("Working directory: {}", System.getProperty("user.dir"));
 
         int maxRows = -1; // default: no splitting
@@ -91,7 +105,7 @@ public class AppConfigLoader {
             log.info("Loaded maxRowsPerFile from YAML: {}", maxRows);
         }
 
-        return new AppConfig(inputPath, outputPath, maxRows);
+        return new AppConfig(inputPath, outputPath, maxRows, outputPathSpecified);
     }
 
     private static Map<String, String> parseArgs(String[] args) {
