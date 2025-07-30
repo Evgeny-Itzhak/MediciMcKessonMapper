@@ -35,6 +35,7 @@ public class FieldProcessor {
             case BODY_HTML:
             case VENDOR:
             case TYPE:
+            case IMAGE_ALT_TEXT:
                 return processStandardField(field, row, mapping);
 
             case TAGS:
