@@ -17,7 +17,8 @@ public enum CsvField {
     IMAGE_SRC("Image Src"),
     IMAGE_ALT_TEXT("Image Alt Text"),
     CUSTOM_COLLECTIONS("Custom Collections"),
-    VARIANT_SKU("Variant SKU");
+    VARIANT_SKU("Variant SKU"),
+    VARIANT_WEIGHT("Variant Weight");
 
     private final String header;
     private final String defaultValue;

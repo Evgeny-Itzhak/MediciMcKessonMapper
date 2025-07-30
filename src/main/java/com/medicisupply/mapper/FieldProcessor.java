@@ -38,6 +38,7 @@ public class FieldProcessor {
             case IMAGE_ALT_TEXT:
             case CUSTOM_COLLECTIONS:
             case VARIANT_SKU:
+            case VARIANT_WEIGHT:
                 return processStandardField(field, row, mapping);
 
             case TAGS:
