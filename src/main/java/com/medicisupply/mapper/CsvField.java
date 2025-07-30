@@ -16,7 +16,8 @@ public enum CsvField {
     STATUS("Status", "Active"),
     IMAGE_SRC("Image Src"),
     IMAGE_ALT_TEXT("Image Alt Text"),
-    CUSTOM_COLLECTIONS("Custom Collections");
+    CUSTOM_COLLECTIONS("Custom Collections"),
+    VARIANT_SKU("Variant SKU");
 
     private final String header;
     private final String defaultValue;

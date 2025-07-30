@@ -37,6 +37,7 @@ public class FieldProcessor {
             case TYPE:
             case IMAGE_ALT_TEXT:
             case CUSTOM_COLLECTIONS:
+            case VARIANT_SKU:
                 return processStandardField(field, row, mapping);
 
             case TAGS:
