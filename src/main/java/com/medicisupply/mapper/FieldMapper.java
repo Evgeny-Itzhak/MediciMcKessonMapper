@@ -19,6 +19,7 @@ public class FieldMapper {
         map.put(CsvField.STATUS, ExcelField.APPLICATION.getHeader());
         map.put(CsvField.IMAGE_SRC, ExcelField.IMAGES.getHeader());
         map.put(CsvField.IMAGE_ALT_TEXT, ExcelField.RETAIL_DESCRIPTION.getHeader());
+        map.put(CsvField.CUSTOM_COLLECTIONS, ExcelField.SUPPLY_MANAGER_CATEGORY.getHeader());
         return map;
     }
 }

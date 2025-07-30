@@ -15,6 +15,7 @@ class FieldMapperTest {
         assertEquals("Retail Description", map.get(CsvField.HANDLE));
         assertEquals("Retail Description", map.get(CsvField.TITLE));
         assertEquals("Brand or Series", map.get(CsvField.VENDOR));
+        assertEquals("Supply Manager Category", map.get(CsvField.CUSTOM_COLLECTIONS));
     }
 
     @Test

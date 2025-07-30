@@ -15,7 +15,8 @@ public enum CsvField {
     TAGS("Tags"),
     STATUS("Status", "Active"),
     IMAGE_SRC("Image Src"),
-    IMAGE_ALT_TEXT("Image Alt Text");
+    IMAGE_ALT_TEXT("Image Alt Text"),
+    CUSTOM_COLLECTIONS("Custom Collections");
 
     private final String header;
     private final String defaultValue;
