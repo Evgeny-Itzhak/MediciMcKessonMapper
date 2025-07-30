@@ -94,4 +94,55 @@ class CsvWriterTest {
         assertNotNull(csvFiles);
         assertEquals(3, csvFiles.length, "Expected 3 CSV parts, but found " + csvFiles.length);
     }
+    
+    @Test
+    void testCsvEscaping() throws Exception {
+        // --- Prepare mock data with fields that need escaping ---
+        ProductRow row = new ProductRow();
+        
+        // Field with commas
+        row.setField("Retail Description", "Product, with commas");
+        
+        // Field with quotes
+        row.setField("Brand or Series", "Brand \"quoted\" text");
+        
+        // Field with both commas and quotes
+        row.setField("Retail Features & Benefits", "Features, with \"quotes\" and commas");
+        
+        // Regular field
+        row.setField("Application", "Regular text");
+        
+        // Required fields for handle building
+        row.setField("McK Item No", "12345");
+        
+        List<ProductRow> data = Collections.singletonList(row);
+        Map<CsvField, String> fieldMap = FieldMapper.getFieldMappings();
+
+        // --- Use CsvWriter to dump into a temp CSV file ---
+        File tempCsv = Files.createTempFile("csv-escaping-", ".csv").toFile();
+        tempCsv.deleteOnExit();
+
+        new CsvWriter().write(tempCsv, data, fieldMap, 0);
+
+        // Read entire file into a string
+        String output = Files.readString(tempCsv.toPath(), StandardCharsets.UTF_8);
+        
+        // --- Assertions ---
+        
+        // Check that fields with commas are wrapped in quotes
+        assertTrue(output.contains("\"Product, with commas\""), 
+                "Field with commas should be wrapped in quotes");
+        
+        // Check that fields with quotes have their quotes doubled and are wrapped in quotes
+        assertTrue(output.contains("\"Brand \"\"quoted\"\" text\""), 
+                "Field with quotes should have quotes doubled and be wrapped in quotes");
+        
+        // Check that fields with both commas and quotes are properly escaped
+        assertTrue(output.contains("\"Features, with \"\"quotes\"\" and commas\""), 
+                "Field with both commas and quotes should be properly escaped");
+        
+        // Check that regular fields are not wrapped in quotes
+        assertTrue(output.contains(",Regular text,"), 
+                "Regular field should not be wrapped in quotes");
+    }
 }

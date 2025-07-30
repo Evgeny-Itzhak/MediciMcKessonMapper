@@ -97,4 +97,91 @@ class FieldProcessorTest {
         String out = FieldProcessor.process(null, row, mapping);
         assertEquals("", out);
     }
+    
+    @Test
+    void testBuildImageSrc_combinesMultipleImages() {
+        // Prepare a ProductRow with primary image and image reference numbers
+        ProductRow row = new ProductRow();
+        row.setField("Primary Image", "http://example.com/image1.jpg");
+        row.setField("Image Reference Number 2", "http://example.com/image2.jpg");
+        row.setField("Image Reference Number 3", "http://example.com/image3.jpg");
+        // Leave some image references empty
+        row.setField("Image Reference Number 5", "http://example.com/image5.jpg");
+        
+        Map<CsvField, String> mapping = new EnumMap<>(CsvField.class);
+        
+        // Act
+        String imageSrc = FieldProcessor.process(CsvField.IMAGE_SRC, row, mapping);
+        
+        // Assert
+        // Should contain all images separated by semicolons, including empty ones
+        assertEquals(
+                "http://example.com/image1.jpg;http://example.com/image2.jpg;http://example.com/image3.jpg;;http://example.com/image5.jpg;;;;;",
+                imageSrc
+        );
+    }
+    
+    @Test
+    void testBuildImageSrc_withNoImages() {
+        // Prepare a ProductRow with no images
+        ProductRow row = new ProductRow();
+        
+        Map<CsvField, String> mapping = new EnumMap<>(CsvField.class);
+        
+        // Act
+        String imageSrc = FieldProcessor.process(CsvField.IMAGE_SRC, row, mapping);
+        
+        // Assert
+        // Should contain 10 empty fields separated by semicolons
+        assertEquals(";;;;;;;;;", imageSrc);
+    }
+    
+    @Test
+    void testProcessStandardField_withNullField() {
+        ProductRow row = new ProductRow();
+        Map<CsvField, String> mapping = new EnumMap<>(CsvField.class);
+        
+        // Act
+        String result = FieldProcessor.processStandardField(null, row, mapping);
+        
+        // Assert
+        assertEquals("", result);
+    }
+    
+    @Test
+    void testProcessStandardField_withNullRow() {
+        Map<CsvField, String> mapping = new EnumMap<>(CsvField.class);
+        
+        // Act
+        String result = FieldProcessor.processStandardField(CsvField.TITLE, null, mapping);
+        
+        // Assert
+        String expectedDefault = CsvField.TITLE.getDefaultValue();
+        assertEquals(expectedDefault != null ? expectedDefault : "", result);
+    }
+    
+    @Test
+    void testProcessStandardField_withNullMapping() {
+        ProductRow row = new ProductRow();
+        
+        // Act
+        String result = FieldProcessor.processStandardField(CsvField.COMMAND, row, null);
+        
+        // Assert
+        assertEquals(CsvField.COMMAND.getDefaultValue(), result);
+    }
+    
+    @Test
+    void testProcessStandardField_withNoMappingForField() {
+        ProductRow row = new ProductRow();
+        Map<CsvField, String> mapping = new EnumMap<>(CsvField.class);
+        // Don't add any mapping for TITLE
+        
+        // Act
+        String result = FieldProcessor.processStandardField(CsvField.TITLE, row, mapping);
+        
+        // Assert
+        String expectedDefault = CsvField.TITLE.getDefaultValue();
+        assertEquals(expectedDefault != null ? expectedDefault : "", result);
+    }
 }

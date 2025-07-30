@@ -35,6 +35,8 @@ public class FieldProcessor {
             case BODY_HTML:
             case VENDOR:
             case TYPE:
+                return processStandardField(field, row, mapping);
+
             case TAGS:
                 return buildTags(row, mapping);
 
@@ -99,17 +101,42 @@ public class FieldProcessor {
 
     /**
      * Processes standard fields (TITLE, BODY_HTML, etc.) based on mapping.
+     * 
+     * @param field The CSV field to process
+     * @param row The product row containing the data
+     * @param mapping The mapping from CSV fields to Excel field headers
+     * @return The processed field value, or default value, or empty string
      */
-    private static String processStandardField(CsvField field, ProductRow row, Map<CsvField, String> mapping) {
+    public static String processStandardField(CsvField field, ProductRow row, Map<CsvField, String> mapping) {
+        // Handle null field
+        if (field == null) {
+            log.warn("Null field passed to processStandardField");
+            return "";
+        }
+        
+        // Handle null row
+        if (row == null) {
+            log.warn("Null row passed to processStandardField for field: {}", field);
+            return field.getDefaultValue() != null ? field.getDefaultValue() : "";
+        }
+        
+        // Handle null mapping
+        if (mapping == null) {
+            log.warn("Null mapping passed to processStandardField for field: {}", field);
+            return field.getDefaultValue() != null ? field.getDefaultValue() : "";
+        }
+        
         String sourceColumn = mapping.get(field);
         if (sourceColumn != null) {
             String value = row.getField(sourceColumn);
             if ((value == null || value.isEmpty()) && field.getDefaultValue() != null) {
                 return field.getDefaultValue();
             }
-            return value;
+            return value != null ? value : "";
         }
-        return "";
+        
+        log.warn("No mapping found for field: {}", field);
+        return field.getDefaultValue() != null ? field.getDefaultValue() : "";
     }
     
     /**
