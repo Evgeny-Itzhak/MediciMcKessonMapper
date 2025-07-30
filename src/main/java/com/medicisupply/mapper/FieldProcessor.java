@@ -44,6 +44,9 @@ public class FieldProcessor {
             case SHIPPING_HEIGHT:
             case SHIPPING_DEPTH:
             case SHIPPING_WIDTH:
+            case DIMENSION_UOM:
+            case VARIANT_BARCODE:
+            case VARIANT_IMAGE:
                 return processStandardField(field, row, mapping);
 
             case TAGS:

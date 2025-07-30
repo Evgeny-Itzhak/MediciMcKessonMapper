@@ -23,11 +23,13 @@ public enum ExcelField {
     SHIPPING_HEIGHT("Shipping Height"),
     SHIPPING_DEPTH("Shipping Depth"),
     WEIGHT_UOM("Weight UOM"),
+    DIMENSION_UOM("Dimension UOM"),
+    UPC("UPC"),
+    PRIMARY_IMAGE("Primary Image"),
 
     //columns that are NOT in csv-file
     MCK_ITEM_NO("McK Item No"),
     MANUFACTURER_NUMBER("Manufacturer Number"),
-    PRIMARY_IMAGE("Primary Image"),
     IMAGES("Images");
 
     private final String header;

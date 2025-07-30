@@ -21,6 +21,9 @@ class FieldMapperTest {
         assertEquals("Shipping Height", map.get(CsvField.SHIPPING_HEIGHT));
         assertEquals("Shipping Depth", map.get(CsvField.SHIPPING_DEPTH));
         assertEquals("Shipping Weight", map.get(CsvField.SHIPPING_WEIGHT));
+        assertEquals("Dimension UOM", map.get(CsvField.DIMENSION_UOM));
+        assertEquals("UPC", map.get(CsvField.VARIANT_BARCODE));
+        assertEquals("Primary Image", map.get(CsvField.VARIANT_IMAGE));
     }
 
     @Test

@@ -23,7 +23,10 @@ public enum CsvField {
     SHIPPING_WIDTH("Shipping Width"),
     SHIPPING_HEIGHT("Shipping Height"),
     SHIPPING_DEPTH("Shipping Depth"),
-    SHIPPING_WEIGHT("Shipping Weight");
+    SHIPPING_WEIGHT("Shipping Weight"),
+    DIMENSION_UOM("Dimension UOM"),
+    VARIANT_BARCODE("Variant Barcode"),
+    VARIANT_IMAGE("Variant Image");
 
     private final String header;
     private final String defaultValue;
