@@ -11,7 +11,4 @@ public class AppConfig {
     private final int maxRowsPerFile;
     private final boolean outputPathSpecified;
 
-    public AppConfig(String inputPath, String outputPath, int maxRowsPerFile) {
-        this(inputPath, outputPath, maxRowsPerFile, false);
-    }
 }
