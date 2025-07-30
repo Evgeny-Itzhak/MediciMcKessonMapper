@@ -39,6 +39,7 @@ public class FieldProcessor {
             case CUSTOM_COLLECTIONS:
             case VARIANT_SKU:
             case VARIANT_WEIGHT:
+            case VARIANT_WEIGHT_UNIT:
                 return processStandardField(field, row, mapping);
 
             case TAGS:

@@ -18,7 +18,8 @@ public enum CsvField {
     IMAGE_ALT_TEXT("Image Alt Text"),
     CUSTOM_COLLECTIONS("Custom Collections"),
     VARIANT_SKU("Variant SKU"),
-    VARIANT_WEIGHT("Variant Weight");
+    VARIANT_WEIGHT("Variant Weight"),
+    VARIANT_WEIGHT_UNIT("Variant Weight Unit");
 
     private final String header;
     private final String defaultValue;
