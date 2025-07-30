@@ -13,7 +13,8 @@ public enum CsvField {
     TYPE ("Type"),
     TAGS_COMMAND ("Tags Command", "REPLACE"),
     TAGS("Tags"),
-    STATUS("Status", "Active");
+    STATUS("Status", "Active"),
+    IMAGE_SRC("Image Src");
 
     private final String header;
     private final String defaultValue;

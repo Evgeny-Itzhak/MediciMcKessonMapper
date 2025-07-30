@@ -28,16 +28,18 @@ public class FieldProcessor {
 
             case COMMAND:
             case TAGS_COMMAND:
+            case STATUS:
                 return field.getDefaultValue();
 
             case TITLE:
             case BODY_HTML:
             case VENDOR:
             case TYPE:
-                return processStandardField(field, row, mapping);
-
             case TAGS:
                 return buildTags(row, mapping);
+
+            case IMAGE_SRC:
+                return buildImageSrc(row);
 
             default:
                 // Return empty string if no mapping defined
@@ -108,5 +110,27 @@ public class FieldProcessor {
             return value;
         }
         return "";
+    }
+    
+    /**
+     * Builds the IMAGE_SRC value by combining multiple image fields with semicolons.
+     * Fields: Primary Image, Image Reference Number 2-10
+     */
+    private static String buildImageSrc(ProductRow row) {
+        List<String> imageFields = new ArrayList<>();
+        
+        // Add Primary Image
+        String primaryImage = Objects.toString(row.getField(ExcelField.PRIMARY_IMAGE.getHeader()), "");
+        imageFields.add(primaryImage);
+        
+        // Add Image Reference Number 2-10
+        for (int i = 2; i <= 10; i++) {
+            String fieldName = "Image Reference Number " + i;
+            String imageValue = Objects.toString(row.getField(fieldName), "");
+            imageFields.add(imageValue);
+        }
+        
+        // Join all fields with semicolons
+        return String.join(";", imageFields);
     }
 }
