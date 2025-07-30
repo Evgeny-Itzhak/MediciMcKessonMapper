@@ -17,6 +17,10 @@ class FieldMapperTest {
         assertEquals("Brand or Series", map.get(CsvField.VENDOR));
         assertEquals("Supply Manager Category", map.get(CsvField.CUSTOM_COLLECTIONS));
         assertEquals("Shipping Weight", map.get(CsvField.VARIANT_WEIGHT));
+        assertEquals("Shipping Width", map.get(CsvField.SHIPPING_WIDTH));
+        assertEquals("Shipping Height", map.get(CsvField.SHIPPING_HEIGHT));
+        assertEquals("Shipping Depth", map.get(CsvField.SHIPPING_DEPTH));
+        assertEquals("Shipping Weight", map.get(CsvField.SHIPPING_WEIGHT));
     }
 
     @Test

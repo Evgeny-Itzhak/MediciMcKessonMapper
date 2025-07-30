@@ -40,6 +40,10 @@ public class FieldProcessor {
             case VARIANT_SKU:
             case VARIANT_WEIGHT:
             case VARIANT_WEIGHT_UNIT:
+            case SHIPPING_WEIGHT:
+            case SHIPPING_HEIGHT:
+            case SHIPPING_DEPTH:
+            case SHIPPING_WIDTH:
                 return processStandardField(field, row, mapping);
 
             case TAGS:

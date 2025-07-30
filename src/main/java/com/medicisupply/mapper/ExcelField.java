@@ -19,6 +19,9 @@ public enum ExcelField {
     SUPPLY_MANAGER_CATEGORY("Supply Manager Category"),
     E1_SKU("E1 SKU"),
     SHIPPING_WEIGHT("Shipping Weight"),
+    SHIPPING_WIDTH("Shipping Width"),
+    SHIPPING_HEIGHT("Shipping Height"),
+    SHIPPING_DEPTH("Shipping Depth"),
     WEIGHT_UOM("Weight UOM"),
 
     //columns that are NOT in csv-file

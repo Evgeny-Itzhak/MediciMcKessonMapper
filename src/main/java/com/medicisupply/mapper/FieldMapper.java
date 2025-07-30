@@ -23,6 +23,10 @@ public class FieldMapper {
         map.put(CsvField.VARIANT_SKU, ExcelField.E1_SKU.getHeader());
         map.put(CsvField.VARIANT_WEIGHT, ExcelField.SHIPPING_WEIGHT.getHeader());
         map.put(CsvField.VARIANT_WEIGHT_UNIT, ExcelField.WEIGHT_UOM.getHeader());
+        map.put(CsvField.SHIPPING_WIDTH, ExcelField.SHIPPING_WIDTH.getHeader());
+        map.put(CsvField.SHIPPING_HEIGHT, ExcelField.SHIPPING_HEIGHT.getHeader());
+        map.put(CsvField.SHIPPING_DEPTH, ExcelField.SHIPPING_DEPTH.getHeader());
+        map.put(CsvField.SHIPPING_WEIGHT, ExcelField.SHIPPING_WEIGHT.getHeader());
         return map;
     }
 }

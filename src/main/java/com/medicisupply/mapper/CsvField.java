@@ -19,7 +19,11 @@ public enum CsvField {
     CUSTOM_COLLECTIONS("Custom Collections"),
     VARIANT_SKU("Variant SKU"),
     VARIANT_WEIGHT("Variant Weight"),
-    VARIANT_WEIGHT_UNIT("Variant Weight Unit");
+    VARIANT_WEIGHT_UNIT("Variant Weight Unit"),
+    SHIPPING_WIDTH("Shipping Width"),
+    SHIPPING_HEIGHT("Shipping Height"),
+    SHIPPING_DEPTH("Shipping Depth"),
+    SHIPPING_WEIGHT("Shipping Weight");
 
     private final String header;
     private final String defaultValue;
